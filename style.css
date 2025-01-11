@@ -62,8 +62,6 @@ a.navbar-brand:hover {
   border: 3px solid #177cd0;
   padding: 3px;
   margin: 3px;
-  height: 120px;
-  overflow-y: scroll;
 }
 .overlay_select img {
   width: 60px;
@@ -133,7 +131,8 @@ a.navbar-brand:hover {
   border-radius: 10px;
   margin: 4px auto;
   width: 90vw;
-  overflow: scroll;
+  height: 200px;
+  overflow-y: scroll;
 }
 #banner_preview {
   max-width: 600px;
