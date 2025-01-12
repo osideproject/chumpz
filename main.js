@@ -39,7 +39,7 @@ const setMainAsset = function(url, overlay=null) {
 }
 const toggleOverlay = function() {
   let img = $(this).attr('id')
-  if(overlays.indexOf(img) <= 0) {
+  if(overlays.indexOf(img) < 0) {
     addOverlay(img);
     console.log(img);
     $(this).addClass('overlay_active');
