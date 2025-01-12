@@ -1,9 +1,10 @@
 const t = Date.now();
-let loaded, asset, overlay = false;
+let loaded, asset = false;
+let overlays = [];
 
 $(function() {
   $('#find_button').click(loadTokenAsset);
-  $('.overlay_select').click(addOverlay);
+  $('.overlay_select').click(toggleOverlay);
 });
 
 const loadTokenAsset = function() {
@@ -36,10 +37,26 @@ const setMainAsset = function(url, overlay=null) {
   loaded = true;
   $('.pfp').show();
 }
+const toggleOverlay = function() {
+  let img = $(this).attr('id')
+  if(overlays.indexOf(img) <= 0) {
+    addOverlay(img);
+    console.log(img);
+    $(this).addClass('overlay_active');
+  } else {
+    removeOverlay(img);
+    $(this).removeClass('overlay_active');
+  }
+}
 
-const addOverlay = function() {
-  overlay = './images/'+$(this).attr('id')+'.png?t=' + t;
-  console.log(overlay);
+const addOverlay = function(img) {
+  overlays.push(img);
+  loadImage();
+}
+
+const removeOverlay = function(img) {
+  let idx = overlays.indexOf(img);
+  overlays.splice(idx, 1);
   loadImage();
 }
 
@@ -56,8 +73,8 @@ const loadImage = async function() {
   const dataURL = canvas.toDataURL('image/png');
   const pfp = document.getElementById('pfp');
   const ctx = pfp.getContext('2d');
-  pfp.width = 500;
-  pfp.height = 500;
+  pfp.width = 1000;
+  pfp.height = 1000;
   img = newImage(dataURL);
   await preload(dataURL)
   .then(function() {
@@ -86,9 +103,10 @@ const generatePfpImage = async function() {
 
   var images = [newImage(asset)];
 
-  if(overlay) {
-    images.push(newImage(overlay));
-  }
+  overlays.forEach(ol => {
+    img = './images/' + ol + '.png?t='+t;
+    images.push(newImage(img));
+  })
 
   canvas.width = 1000;
   canvas.height = 1000;
@@ -99,7 +117,7 @@ const generatePfpImage = async function() {
   }))).then(() => {
     images.forEach(img => {
       ctx.drawImage(
-        img, 0, 0, 500, 500
+        img, 0, 0, 1000, 1000
       );
     });
     return canvas;

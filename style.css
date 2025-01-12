@@ -59,9 +59,12 @@ a.navbar-brand:hover {
 .overlay_select {
   cursor: pointer;
   display: inline-block;
-  border: 3px solid #177cd0;
+  border: 2px solid #177cd0;
   padding: 3px;
   margin: 3px;
+}
+.overlay_active {
+  border: 3px solid #177c00;
 }
 .overlay_select img {
   width: 60px;
