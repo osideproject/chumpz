@@ -31,7 +31,7 @@ const loadTokenAsset = function() {
 
 const setMainAsset = function(url, overlay=null) {
   console.log(url);
-  asset = url; //.replace('width=250', 'width=2400');
+  asset = url.replace('width=512', 'width=2000');
   console.log(url)
   loadImage();
   loaded = true;
@@ -73,13 +73,13 @@ const loadImage = async function() {
   const dataURL = canvas.toDataURL('image/png');
   const pfp = document.getElementById('pfp');
   const ctx = pfp.getContext('2d');
-  pfp.width = 1000;
-  pfp.height = 1000;
+  pfp.width = 2000;
+  pfp.height = 2000;
   img = newImage(dataURL);
   await preload(dataURL)
   .then(function() {
     ctx.drawImage(
-      img, 0, 0, 1000, 1000
+      img, 0, 0, 2000, 2000
     );
   });
 }
@@ -108,8 +108,8 @@ const generatePfpImage = async function() {
     images.push(newImage(img));
   })
 
-  canvas.width = 1000;
-  canvas.height = 1000;
+  canvas.width = 2000;
+  canvas.height = 2000;
 
   return Promise.all(images.map(img => new Promise((resolve, reject) => {
     img.onload = resolve;
@@ -117,7 +117,7 @@ const generatePfpImage = async function() {
   }))).then(() => {
     images.forEach(img => {
       ctx.drawImage(
-        img, 0, 0, 1000, 1000
+        img, 0, 0, 2000, 2000
       );
     });
     return canvas;
