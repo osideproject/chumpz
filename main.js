@@ -1,18 +1,47 @@
 const t = Date.now();
 let loaded, asset = false;
 let overlays = [];
+let selection = 'chumpz'
+const collections = {
+  'chumpz': '0xa9a1d086623475595A02991664742E4A1cbAFcb8',
+  'geez': '0xb3443b6bd585ba4118cae2bedb61c7ec4a8281df',
+  'gobs': '0xBEbaa24108d6a03C7331464270b95278bBBE6Ff7'
+}
 
 $(function() {
   $('#find_button').click(loadTokenAsset);
   $('.overlay_select').click(toggleOverlay);
+  $('.select_button').click(selectCollection);
+  switchCollection(selection);
 });
+
+const selectCollection = function() {
+  selection = $(this).attr('id');
+  switchCollection();
+}
+
+const switchCollection = function() {
+  clearOverlays();
+  $('.overlay_section').hide();
+  $('#'+selection+'_overlays').show();
+  $('.select_button').removeClass('active_button');
+  $('#'+selection).addClass('active_button');
+}
+
+const clearOverlays = function () {
+  const pfp = document.getElementById('pfp');
+  const context = pfp.getContext('2d');
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  $('.overlay_select').removeClass('button_active')
+  overlays = [];
+  loaded = false;
+}
 
 const loadTokenAsset = function() {
   $('.error').hide();
   const options = { method: 'GET', headers: { accept: '*/*', xApiKey: 'eee8eadf-046b-5f38-ba21-145d40ca278e' } };
-  var address = '0xa9a1d086623475595A02991664742E4A1cbAFcb8';
+  var address = collections[selection];
   var token_id = $('#token_id').val();
-  console.log(token_id)
   url = `https://api-apechain.reservoir.tools/tokens/v7?tokens=${address}:${token_id}`;
   console.log(url);
   fetch(url)
@@ -39,6 +68,7 @@ const setMainAsset = function(url, overlay=null) {
 }
 const toggleOverlay = function() {
   let img = $(this).attr('id')
+  if (!loaded) { return }
   if(overlays.indexOf(img) < 0) {
     addOverlay(img);
     console.log(img);
@@ -145,59 +175,4 @@ const downloadCanvas = function(canvas) {
   link.href = dataURL;
   link.download = 'image.png';
   link.click();
-}
-
-const editImage = async function(imageFile, prompt) {
-    const apiUrl = 'https://api.openai.com/v1/images';
-    try {
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${apiKey}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              prompt: 'Manipulate this image',
-              image: imageFile.split(',')[1],
-              n: 1,
-              size: '1024x1024'
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error('API request failed');
-        }
-
-        console.log(response); // Handle the response as needed
-
-        // Optionally, display the generated images
-        result.data.forEach(image => {
-            const imgElement = new Image();
-            imgElement.src = image.url; // Assuming the API returns URLs of the images
-            document.body.appendChild(imgElement);
-        });
-
-    } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while editing the image.');
-    }
-}
-
-function dataURItoBlob(dataURI) {
-  // convert base64/URLEncoded data component to raw binary data held in a string
-  var byteString;
-  if (dataURI.split(',')[0].indexOf('base64') >= 0)
-    byteString = atob(dataURI.split(',')[1]);
-  else
-    byteString = unescape(dataURI.split(',')[1]);
-
-  // separate out the mime component
-  var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-  // write the bytes of the string to a typed array
-  var ia = new Uint8Array(byteString.length);
-  for (var i = 0; i < byteString.length; i++) {
-    ia[i] = byteString.charCodeAt(i);
-  }
-  return new Blob([ia], {type:mimeString});
 }

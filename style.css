@@ -49,12 +49,9 @@ a.navbar-brand:hover {
   width: 30vw;
   height: 30vw;
 }
-#download_button, #find_button {
-  width: 20vw;
-  display: inline-block;
-}
-#token_id {
+input, select {
   border-radius: 24px;
+  padding: 4px 10px;
 }
 .overlay_select {
   cursor: pointer;
@@ -111,20 +108,24 @@ a.navbar-brand:hover {
 .select2-results {
   color: black;
 }
-.primary_button {
+.primary_button, .select_button {
+  display: inline-block;
   background: #174cd0;
   color: #fff;
-  font-size: 28px;
+  font-size: 16px;
   font-weight: 900;
   padding: 10px;
   cursor: pointer;
-  display: block;
   text-align: center;
   border: 2px solid #fff;
   border-radius: 10px;
   margin: 4px auto;
+  width: 14vw;
 }
-.primary_button:hover {
+.select_button {
+  width: 10vw;
+}
+.primary_button:hover, .active_button {
   background: #fff;
   color: #174cd0;
 }
@@ -134,8 +135,13 @@ a.navbar-brand:hover {
   border-radius: 10px;
   margin: 4px auto;
   width: 90vw;
-  height: 200px;
+  height: 140px;
+  max-height: 200px;
   overflow-y: scroll;
+  display: none;
+}
+#chumpz_overlays {
+  display: block;
 }
 #banner_preview {
   max-width: 600px;
@@ -224,9 +230,6 @@ a.navbar-brand:hover {
   .trait_selector {
     font-size: 24px;
     text-align: left;
-  }
-  #download_button, #find_button {
-    width: 95vw;
   }
   .overlay_select img {
     width: 50px;
